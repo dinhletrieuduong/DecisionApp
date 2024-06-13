@@ -1,5 +1,10 @@
 import ProjectDescription
 
+let targetScripts = [
+
+    TargetScript.pre(path: "Scripts/SwiftLintRunScript.sh", arguments: [], name: "SwiftLint")
+]
+
 let project = Project(
     name: "DecisionApp",
     packages: [
@@ -20,6 +25,7 @@ let project = Project(
             ),
             sources: ["DecisionApp/Sources/**"],
             resources: ["DecisionApp/Resources/**"],
+            scripts: targetScripts,
             dependencies: [
                 .package(product: "SwiftLint", type: .plugin),
                 .package(product: "Alamofire", type: .plugin),
@@ -36,5 +42,17 @@ let project = Project(
             resources: [],
             dependencies: [.target(name: "DecisionApp")]
         ),
+    ],
+    schemes: [
+        Scheme.scheme(name: "Debug", shared: true,
+                      buildAction: BuildAction.buildAction(targets: ["DecisionApp"]),
+                      testAction: TestAction.targets(["DecisionApp"]),
+                      runAction: RunAction.runAction(configuration: "Debug", executable: "App", arguments: nil)
+                     ),
+        Scheme.scheme(name: "Release", shared: true,
+                      buildAction: BuildAction.buildAction(targets: ["DecisionApp"]),
+                      testAction: TestAction.targets(["DecisionApp"]),
+                      runAction: RunAction.runAction(configuration: "Release", executable: "App", arguments: nil)
+                     )
     ]
 )
